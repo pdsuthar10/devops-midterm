@@ -31,8 +31,8 @@ import jwt
 g = dict()
 
 # mongo
-#mongo_client = MongoClient('mongodb://localhost:27017/')
-mongo_client = MongoClient("mongodb+srv://admin:admin@tweets.8ugzv.mongodb.net/tweets?retryWrites=true&w=majority")
+mongo_client = MongoClient(os.environ.get("DATABASE_URL", 'mongodb://172.17.0.3:27017'))
+# mongo_client = MongoClient("mongodb+srv://admin:admin@tweets.8ugzv.mongodb.net/tweets?retryWrites=true&w=majority")
 
 app = Flask(__name__)
 CORS(app)
@@ -58,13 +58,13 @@ def set_env_var():
     if 'refresh_token_expiration' not in g:
         g['refresh_token_expiration'] = os.environ.get("REFRESH_TOKEN_EXPIRATION", 2592000)
     if 'users' not in g:
-        users = os.environ.get("USERS", 'Elon Musk,Bill Gates,Jeff Bezos')
+        users = os.environ.get("USERS", 'Elon Musk,Bill Gates,Jeff Bezos, pdsuthar10')
         print('users=', users)
         print('g.users=', list(users.split(',')))
         g['users'] = list(users.split(','))
         print('g.users=', g['users'])
     if 'passwords' not in g:
-        passwords = os.environ.get("PASSWORDS", 'Tesla,Clippy,Blue Horizon')
+        passwords = os.environ.get("PASSWORDS", 'Tesla,Clippy,Blue Horizon, test123')
         g['passwords'] = list(passwords.split(','))
         print("g['passwords']=", g['passwords'])
         # Once hashed, the value is irreversible. However in the case of 
@@ -416,22 +416,22 @@ def ssm():
 
 # secured with jwt
 # endpoint to create new tweet
-@app.route("/tweet", methods=["POST"])
+@app.route("/api/tweet", methods=["POST"])
 def add_tweet():
     user = request.json['user']
     description = request.json['description']
     private = request.json['private']
     pic = request.json['pic']
 
-    access_token = request.json['access-token']
-    print("access_token:", access_token)
-    permission = verify_token(access_token)
-    if not permission[0]: 
-        print("tweet submission denied due to invalid token!")
-        print(permission[1])
-        return permission[1]
-    else:
-        print('access token accepted!')
+    # access_token = request.json['access-token']
+    # print("access_token:", access_token)
+    # permission = verify_token(access_token)
+    # if not permission[0]: 
+    #     print("tweet submission denied due to invalid token!")
+    #     print(permission[1])
+    #     return permission[1]
+    # else:
+    #     print('access token accepted!')
 
     tweet = dict(user=user, description=description, private=private,
                 upvote=0, date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -458,7 +458,7 @@ def get_tweets2():
     return jsonify(tweets)
 
 # endpoint to show all of this week's tweets (any user)
-@app.route("/tweets-week", methods=["GET"])
+@app.route("/api/tweets-week", methods=["GET"])
 def get_tweets_week2():
     weekstweets = dict(
         filter(lambda elem: 
@@ -467,7 +467,7 @@ def get_tweets_week2():
     )
     return jsonify(weekstweets)
 
-@app.route("/tweets-results", methods=["GET"])
+@app.route("/api/tweets-results", methods=["GET"])
 def get_tweets_results():
     return json.dumps({"results":
         sorted(
@@ -477,7 +477,7 @@ def get_tweets_results():
     })
 
 
-@app.route("/tweets-week-results", methods=["GET"])
+@app.route("/api/tweets-week-results", methods=["GET"])
 def get_tweets_week_results():
     weektweets = dict(
         filter(lambda elem: 
