@@ -4,6 +4,7 @@ env:
   variables:
     AWS_REGION_2: "us-east-2"
     REACT_APP_API_SERVICE_URL: "http://flask-react-alb-117668094.us-east-1.elb.amazonaws.com"
+    MONGO_DB_URL: "$MONGO_DB_URL"
 
 phases:
   install:
