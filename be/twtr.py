@@ -416,7 +416,7 @@ def ssm():
 
 # secured with jwt
 # endpoint to create new tweet
-@app.route("/api/tweet", methods=["POST"])
+@app.route("/tweet", methods=["POST"])
 def add_tweet():
     user = request.json['user']
     description = request.json['description']
@@ -458,7 +458,7 @@ def get_tweets2():
     return jsonify(tweets)
 
 # endpoint to show all of this week's tweets (any user)
-@app.route("/api/tweets-week", methods=["GET"])
+@app.route("/tweets-week", methods=["GET"])
 def get_tweets_week2():
     weekstweets = dict(
         filter(lambda elem: 
@@ -467,7 +467,7 @@ def get_tweets_week2():
     )
     return jsonify(weekstweets)
 
-@app.route("/api/tweets-results", methods=["GET"])
+@app.route("/tweets-results", methods=["GET"])
 def get_tweets_results():
     return json.dumps({"results":
         sorted(
@@ -477,7 +477,7 @@ def get_tweets_results():
     })
 
 
-@app.route("/api/tweets-week-results", methods=["GET"])
+@app.route("/tweets-week-results", methods=["GET"])
 def get_tweets_week_results():
     weektweets = dict(
         filter(lambda elem: 
