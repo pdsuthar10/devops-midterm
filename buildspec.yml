@@ -25,6 +25,7 @@ phases:
         docker build \
           -f be/Dockerfile \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/twtr-be:prod \
+          --build-arg MONGO_DB_URL=$MONGO_DB_URL \
           ./be
       - >
         docker build \
