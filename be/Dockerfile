@@ -7,6 +7,9 @@ ADD . .
 RUN apt-get update
 RUN pip3 install -r requirements.txt
 
+ARG MONGO_DB_URL
+ENV MONGO_DB_URL $MONGO_DB_URL
+
 # run as non-root user
 RUN adduser --disabled-password myuser
 USER myuser
