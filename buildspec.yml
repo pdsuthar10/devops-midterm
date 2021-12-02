@@ -12,6 +12,8 @@ phases:
       docker: 18
   pre_build:
     commands:
+      - echo "Authenticating docker"
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - echo "mongo url is $MONGO_DB_URL"
       - echo logging in to ecr...
       - >
